@@ -1,0 +1,171 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
+version: "v0.4"
+
+project:
+  name: "Grushko--Neumann rank additivity for free products"
+  description: >-
+    Formalizes the binary Grushko--Neumann theorem: the minimal number of
+    generators of a free product of two finitely generated groups is the sum
+    of the minimal numbers of generators of the factors. The central theorem
+    is proved by a kernel-checked finite labelled-graph reduction. A minimal
+    null path gives either a safe fold or, in the edge-reuse case, a source
+    unfold followed by an explicit monochromatic-vertex contraction. The
+    resulting strict decrease supports strong induction and the separated
+    generator lower bound. The repository also retains the finite-core and
+    free-group rank lemmas from the surrounding development as reusable
+    supporting infrastructure, but only the Grushko theorem is selected by
+    the public Challenge and Comparator.
+  authors:
+    - "Arthur Freitas Ramos"
+    - "David Barros Hulak"
+    - "Ruy J. G. B. de Queiroz"
+  license: "Apache-2.0"
+  responsible_maintainers:
+    - "Arthur Freitas Ramos"
+
+repository:
+  role: "substantive-development"
+
+classification:
+  arxiv: ["math.GR"]
+  msc2020: ["20E07", "20F65", "05C25"]
+
+sources:
+  - title: "On the Number of Generators of a Free Product"
+    authors:
+      - "B. H. Neumann"
+    id: "10.1112/jlms/s1-18.1.12"
+    type: "article"
+    location: "https://doi.org/10.1112/jlms/s1-18.1.12"
+    relationship: "formalizes"
+    note: "Classical source for the rank-additivity theorem; this submission formalizes the binary statement for all finitely generated groups using a certified finite labelled-graph reduction."
+    license: "unknown"
+    author_endorsement: "not-contacted"
+  - title: "Topology of finite graphs"
+    authors:
+      - "John R. Stallings"
+    id: "10.1007/BF02095993"
+    type: "article"
+    location: "https://doi.org/10.1007/BF02095993"
+    relationship: "background"
+    note: "Background for the finite graph and core-graph viewpoint used by the construction; the selected theorem is the Grushko--Neumann rank equality."
+    license: "unknown"
+    author_endorsement: "not-contacted"
+
+related_formalizations:
+  - id: "https://github.com/Arthur742Ramos/MarshallHallTheorem"
+    relationship: "builds-on"
+    note: "Source checkout for the kernel-checked `MarshallHall/Grushko*` implementation modules; this repository gives that development a focused Grushko--Neumann submission surface."
+  - id: "https://github.com/Arthur742Ramos/HowsonIntersectionTheorem"
+    relationship: "related"
+    note: "Accepted companion development in the same subgroup/finite-core program; it is not imported by this repository and is not a source for the selected rank theorem."
+  - id: "https://github.com/leanprover-community/mathlib4/blob/v4.32.0/Mathlib/GroupTheory/Rank.lean"
+    relationship: "builds-on"
+    note: "Provides the `Group.rank` definition and the generator/rank interface used in the statement and lower-bound bridge."
+  - id: "https://github.com/leanprover-community/mathlib4/blob/v4.32.0/Mathlib/GroupTheory/Coprod/Basic.lean"
+    relationship: "builds-on"
+    note: "Provides the free-product type and canonical factor injections used by the finite labelled-graph and rank constructions."
+  - id: "https://github.com/Arthur742Ramos/GraphCoveringTheory"
+    relationship: "other"
+    note: "Earlier covering-graph and Schreier work that motivated the broader program; it is not imported by the proof modules in this focused submission."
+
+status:
+  scope: >-
+    The principal result is the binary theorem for arbitrary finitely
+    generated groups G and H, stated as
+    Group.rank (G ∗ H) = Group.rank G + Group.rank H. Supporting results
+    include the binary and finite-indexed free-group calculations and the
+    graph-reduction infrastructure that supplies the arbitrary-factor lower
+    bound. `Challenge.lean` is a closure-safe statement with one deliberate
+    proof hole; `Solution.lean` and the implementation library contain no
+    proof holes or custom axioms.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: ["propext", "Classical.choice", "Quot.sound"]
+  main_results:
+    - declaration: "GrushkoNeumann.rank_freeProduct_eq_add"
+      file: "GrushkoNeumann.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+    - declaration: "MarshallHall.rank_freeProduct_eq_add"
+      file: "MarshallHall.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+    - declaration: "MarshallHall.rank_binaryFreeProduct"
+      file: "MarshallHall/Grushko.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+    - declaration: "MarshallHall.GeneralGrushko.rank_coprodI_freeGroup"
+      file: "MarshallHall/GrushkoGeneral.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["GPT-5 Codex"]
+      framework: "Lean 4 and Mathlib"
+      tool_setup: "Pinned Lean/Mathlib builds, kernel checking, closure-safe Challenge compilation, and Comparator/NanoDa replay."
+      cost:
+        wall_time: "not tracked"
+        spend_usd: "subscription-based"
+        hardware: "local machine"
+      prompting_notes: "The theorem was developed against the pinned Lean and Mathlib APIs and checked by the Lean kernel."
+  spend_usd: "subscription-based"
+  notes: "The public Challenge selects only the binary Grushko--Neumann equality; the Hall and LERF modules are retained as supporting library code."
+
+fidelity:
+  divergences: >-
+    The historical theorem is expressed here using Mathlib's `Group.rank`
+    and the binary free-product type. The proof covers arbitrary finitely
+    generated group factors, while the additional finite-indexed result in
+    the library is stated for free groups. The public Challenge is intentionally
+    smaller than the implementation and selects only the central binary
+    equality; it does not claim the retained Hall or LERF results as new
+    compared statements.
+
+review:
+  status: "self-assessed"
+  reviewers:
+    - "none"
+  notes: >-
+    The selected Challenge/Solution theorem has a small Mathlib-only
+    statement surface. The Solution and implementation library contain no
+    proof holes or nonstandard axioms. The finite labelled-graph reduction,
+    safe folds, source-unfold branch, monochromatic-vertex contraction,
+    connectivity and marking invariants, strong induction, factorwise rank
+    bounds, and final equality are checked by Lean's kernel. The pinned
+    Comparator replay and NanoDa replay are configured to check the exact
+    selected theorem correspondence independently.
+
+alignment:
+  namespace: "GrushkoNeumann"
+  statements:
+    - source: "B. H. Neumann, On the Number of Generators of a Free Product"
+      lean: "GrushkoNeumann.rank_freeProduct_eq_add"
+      module: "GrushkoNeumann.lean"
+      status: "proved"
+      note: "The focused public declaration is an alias to the implementation theorem proved by the finite labelled-graph reduction in `MarshallHall/GrushkoFull.lean`."
+    - source: "B. H. Neumann, On the Number of Generators of a Free Product"
+      lean: "MarshallHall.rank_freeProduct_eq_add"
+      module: "MarshallHall.lean"
+      status: "proved"
+      note: "The arbitrary-factor binary equality is obtained from the separated-generator lower bound and the elementary upper bound."
+    - source: "B. H. Neumann, On the Number of Generators of a Free Product"
+      lean: "MarshallHall.rank_binaryFreeProduct"
+      module: "MarshallHall/Grushko.lean"
+      status: "proved"
+      note: "The free-group binary case is transported through the canonical free-product equivalence and the abelianization lower bound."
+    - source: "B. H. Neumann, On the Number of Generators of a Free Product"
+      lean: "MarshallHall.GeneralGrushko.rank_coprodI_freeGroup"
+      module: "MarshallHall/GrushkoGeneral.lean"
+      status: "proved"
+      note: "The finite indexed free-group rank calculation supplies a reusable supporting corollary."
+    - source: "Finite labelled-graph reduction"
+      lean: "MarshallHall.GeneralGrushko.rank_coprod_eq_add_of_separated_reduction"
+      module: "MarshallHall/GrushkoGeneral.lean"
+      status: "proved"
+      note: "The graph reduction is connected to the rank equality by a kernel-checked separated-generator bridge."
+
+acknowledgements: "Mathlib contributors for the group-rank, free-product, quotient, finite-type, and graph-facing infrastructure; B. H. Neumann for the classical rank-additivity theorem; John R. Stallings for the finite-graph perspective; the authors of the related formal developments; and the Palomar Registry project for the statement/solution Comparator workflow."
