@@ -7,14 +7,14 @@ project:
     Formalizes the binary Grushko--Neumann theorem: the minimal number of
     generators of a free product of two finitely generated groups is the sum
     of the minimal numbers of generators of the factors. The central theorem
-    is proved by a kernel-checked finite labelled-graph reduction. A minimal
-    null path gives either a safe fold or, in the edge-reuse case, a source
-    unfold followed by an explicit monochromatic-vertex contraction. The
-    resulting strict decrease supports strong induction and the separated
-    generator lower bound. The repository also retains the finite-core and
-    free-group rank lemmas from the surrounding development as reusable
-    supporting infrastructure, but only the Grushko theorem is selected by
-    the public Challenge and Comparator.
+    is proved by a kernel-checked finite labelled-graph reduction. For a
+    minimal null path, the implemented reduction uniformly performs a source
+    unfold, a subsequent safe fold, and an explicit monochromatic-vertex
+    contraction; this gives the strict decrease used by strong induction and
+    the separated-generator lower bound. The repository also retains the
+    finite-core and free-group rank lemmas from the surrounding development as
+    reusable supporting infrastructure, but only the global Grushko theorem
+    declaration is selected by the public Challenge and Comparator.
   authors:
     - "Arthur Freitas Ramos"
     - "David Barros Hulak"
@@ -24,7 +24,10 @@ project:
     - "Arthur Freitas Ramos"
 
 repository:
-  role: "substantive-development"
+  role: "thin-wrapper"
+  substantive_formalization:
+    id: "https://github.com/Arthur742Ramos/MarshallHallTheorem"
+    revision: "449124d5b5659f0c34b5fbb46ffb671eeac4e08e"
 
 classification:
   arxiv: ["math.GR"]
@@ -53,9 +56,6 @@ sources:
     author_endorsement: "not-contacted"
 
 related_formalizations:
-  - id: "https://github.com/Arthur742Ramos/MarshallHallTheorem"
-    relationship: "builds-on"
-    note: "Source checkout for the kernel-checked `MarshallHall/Grushko*` implementation modules; this repository gives that development a focused Grushko--Neumann submission surface."
   - id: "https://github.com/Arthur742Ramos/HowsonIntersectionTheorem"
     relationship: "related"
     note: "Accepted companion development in the same subgroup/finite-core program; it is not imported by this repository and is not a source for the selected rank theorem."
@@ -76,44 +76,80 @@ status:
     Group.rank (G ∗ H) = Group.rank G + Group.rank H. Supporting results
     include the binary and finite-indexed free-group calculations and the
     graph-reduction infrastructure that supplies the arbitrary-factor lower
-    bound. `Challenge.lean` is a closure-safe statement with one deliberate
-    proof hole; `Solution.lean` and the implementation library contain no
-    proof holes or custom axioms.
+    bound. The unqualified declaration in `Challenge.lean` is the exact
+    Comparator-selected surface; `Solution.lean` proves the same global
+    declaration by invoking the namespaced implementation theorem. The
+    Challenge has one deliberate proof hole by design; the Solution and
+    implementation library contain no proof holes or custom axioms.
   sorry_count: 0
   sorry_in_definitions: 0
   axioms: ["propext", "Classical.choice", "Quot.sound"]
   main_results:
+    - declaration: "rank_freeProduct_eq_add"
+      file: "Challenge.lean"
+      sorry_count: 0
+      axioms: ["propext", "Classical.choice", "Quot.sound"]
+      comparator_config: "comparator.json"
+  supporting_results:
     - declaration: "GrushkoNeumann.rank_freeProduct_eq_add"
       file: "GrushkoNeumann.lean"
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
-      comparator_config: "comparator.json"
+      note: "Namespaced implementation theorem invoked by the global Comparator-selected declaration."
     - declaration: "MarshallHall.rank_freeProduct_eq_add"
       file: "MarshallHall.lean"
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
+      note: "Substantive implementation theorem in the pinned source snapshot."
     - declaration: "MarshallHall.rank_binaryFreeProduct"
       file: "MarshallHall/Grushko.lean"
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
+      note: "Supporting free-group corollary, not selected by Comparator."
     - declaration: "MarshallHall.GeneralGrushko.rank_coprodI_freeGroup"
       file: "MarshallHall/GrushkoGeneral.lean"
       sorry_count: 0
       axioms: ["propext", "Classical.choice", "Quot.sound"]
+      note: "Supporting finite-indexed corollary, not selected by Comparator."
 
 automation:
   methods:
     - method: "agent"
-      models: ["GPT-5 Codex"]
-      framework: "Lean 4 and Mathlib"
-      tool_setup: "Pinned Lean/Mathlib builds, kernel checking, closure-safe Challenge compilation, and Comparator/NanoDa replay."
+      models: ["GPT-5.6-sol"]
+      framework: "Codex with Lean 4 and Mathlib"
+      tool_setup: "AI-assisted Lean proof engineering with pinned Lean/Mathlib builds, kernel checking, closure-safe Challenge compilation, and Comparator/NanoDa replay."
       cost:
         wall_time: "not tracked"
         spend_usd: "subscription-based"
         hardware: "local machine"
-      prompting_notes: "The theorem was developed against the pinned Lean and Mathlib APIs and checked by the Lean kernel."
+      prompting_notes: >-
+        The AI agent materially generated and revised Lean declarations, proof
+        scripts, module documentation, and Palomar metadata under the human
+        authors' direction. It also ran the local build and independent
+        Comparator/NanoDa checks, but it is not being asserted as a human
+        author or as the source of mathematical responsibility.
+    - method: "manual"
+      models: []
+      framework: "Lean 4, Mathlib, and repository review"
+      tool_setup: "Human mathematical scoping, attribution and provenance review, code review, verification review, and final communication decisions."
+      cost:
+        wall_time: "not tracked"
+        spend_usd: "not tracked"
+        hardware: "local machine"
+      prompting_notes: >-
+        Arthur Freitas Ramos, David Barros Hulak, and Ruy J. G. B. de Queiroz
+        selected and reviewed the result, its source relationship, its stated
+        scope, and its final submission metadata; the human authors retain
+        responsibility for the formalization and its mathematical claims.
   spend_usd: "subscription-based"
-  notes: "The public Challenge selects only the binary Grushko--Neumann equality; the Hall and LERF modules are retained as supporting library code."
+  notes: >-
+    The public Challenge selects only the global binary
+    `rank_freeProduct_eq_add` declaration. The AI agent materially assisted
+    with implementation, proof engineering, documentation, and automated
+    checking. The human authors directed the mathematical scope and source
+    attribution, reviewed the code and claims, and are responsible for the
+    final formalization and communication. Lean's kernel and the independent
+    Comparator/NanoDa workflow supplied automated verification.
 
 fidelity:
   divergences: >-
@@ -132,36 +168,42 @@ review:
   notes: >-
     The selected Challenge/Solution theorem has a small Mathlib-only
     statement surface. The Solution and implementation library contain no
-    proof holes or nonstandard axioms. The finite labelled-graph reduction,
-    safe folds, source-unfold branch, monochromatic-vertex contraction,
-    connectivity and marking invariants, strong induction, factorwise rank
-    bounds, and final equality are checked by Lean's kernel. The pinned
-    Comparator replay and NanoDa replay are configured to check the exact
-    selected theorem correspondence independently.
+    proof holes or nonstandard axioms. The finite labelled-graph reduction
+    always follows the documented sequence of source unfold, subsequent safe
+    fold, and monochromatic-vertex contraction, with connectivity and marking
+    invariants, strong induction, factorwise rank bounds, and the final
+    equality checked by Lean's kernel. The pinned Comparator replay and NanoDa
+    replay are configured to check the exact global selected theorem
+    correspondence independently.
 
 alignment:
-  namespace: "GrushkoNeumann"
+  namespace: "global Comparator declaration; GrushkoNeumann implementation namespace"
   statements:
+    - source: "B. H. Neumann, On the Number of Generators of a Free Product"
+      lean: "rank_freeProduct_eq_add"
+      module: "Challenge.lean and Solution.lean"
+      status: "proved"
+      note: "This unqualified global declaration is the exact theorem named in `comparator.json`; `Solution.lean` proves it by exacting `GrushkoNeumann.rank_freeProduct_eq_add`."
     - source: "B. H. Neumann, On the Number of Generators of a Free Product"
       lean: "GrushkoNeumann.rank_freeProduct_eq_add"
       module: "GrushkoNeumann.lean"
       status: "proved"
-      note: "The focused public declaration is an alias to the implementation theorem proved by the finite labelled-graph reduction in `MarshallHall/GrushkoFull.lean`."
+      note: "Namespaced implementation theorem used by the global Comparator declaration; it is not a second selected Comparator theorem. Its substantive proof is in the pinned `MarshallHall` source modules."
     - source: "B. H. Neumann, On the Number of Generators of a Free Product"
       lean: "MarshallHall.rank_freeProduct_eq_add"
       module: "MarshallHall.lean"
       status: "proved"
-      note: "The arbitrary-factor binary equality is obtained from the separated-generator lower bound and the elementary upper bound."
+      note: "Substantive arbitrary-factor implementation theorem in the pinned source snapshot; the focused wrapper exposes it through the namespaced theorem above."
     - source: "B. H. Neumann, On the Number of Generators of a Free Product"
       lean: "MarshallHall.rank_binaryFreeProduct"
       module: "MarshallHall/Grushko.lean"
       status: "proved"
-      note: "The free-group binary case is transported through the canonical free-product equivalence and the abelianization lower bound."
+      note: "Supporting free-group corollary, not selected by Comparator."
     - source: "B. H. Neumann, On the Number of Generators of a Free Product"
       lean: "MarshallHall.GeneralGrushko.rank_coprodI_freeGroup"
       module: "MarshallHall/GrushkoGeneral.lean"
       status: "proved"
-      note: "The finite indexed free-group rank calculation supplies a reusable supporting corollary."
+      note: "Supporting finite-indexed free-group corollary, not selected by Comparator."
     - source: "Finite labelled-graph reduction"
       lean: "MarshallHall.GeneralGrushko.rank_coprod_eq_add_of_separated_reduction"
       module: "MarshallHall/GrushkoGeneral.lean"

@@ -3,7 +3,7 @@ import MarshallHall.GrushkoEdge
 /-!
 ## The local source unfold
 
-This file formalizes the local graph move used in the last case of the
+This file formalizes the source-unfold stage of the
 Stallings proof of Grushko's theorem.  Fix an oriented edge `e₀` leaving a
 vertex `a`.  The source is split into an old copy and a new copy.  All
 original arrows labelled in the colour of `e₀` remain attached to the old
@@ -1819,7 +1819,7 @@ theorem unfoldNew_ne_vertexAt_of_ne_source
   exact hb ((unfoldVertexAt_eq_new_iff L (allArrowSource e₀) e₀
     (show V from b) (unfoldEdgeColor L e₀)).mp h').1
 
-/-! ### The source-unfold branch supplies a safe fold -/
+/-! ### The source-unfold stage supplies the subsequent safe fold -/
 
 theorem exists_safe_fold_after_unfold {n : ℕ}
     (M : MarkedBinaryGraph (G := G) (H := H) (V := V) n)

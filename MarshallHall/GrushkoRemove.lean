@@ -6,8 +6,8 @@ import MarshallHall.GrushkoEdge
 When every edge at a vertex has one factor colour, an incident edge can be
 contracted after sliding the other incident edges across it.  The resulting
 labels are products inside that one factor, so the operation stays within the
-binary labelling format.  This is the marking-preserving contraction used in
-the unsafe source-unfold branch of the Grushko proof.
+binary labelling format.  This is the marking-preserving contraction used
+after the source unfold and subsequent safe fold in the Grushko proof.
 -/
 
 open Function Monoid.Coprod Quiver

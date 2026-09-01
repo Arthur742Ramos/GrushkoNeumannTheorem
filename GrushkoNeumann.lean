@@ -18,8 +18,8 @@ namespace GrushkoNeumann
 /-- The rank of a free product of two finitely generated groups is additive.
 
 The implementation proceeds through a finite labelled-graph reduction.  A
-minimal null path yields either a safe fold or a source-unfold followed by an
-explicit monochromatic-vertex contraction; strong induction on the finite
+minimal null path is handled by a source unfold, a subsequent safe fold, and
+an explicit monochromatic-vertex contraction; strong induction on the finite
 vertex set then gives the separated-generator lower bound.
 -/
 theorem rank_freeProduct_eq_add {G H : Type u} [Group G] [Group H]

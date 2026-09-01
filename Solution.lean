@@ -3,8 +3,9 @@ import GrushkoNeumann
 /-!
 # Checked Grushko--Neumann solution
 
-The solution connects the closure-safe public statement to the kernel-checked
-finite labelled-graph reduction in `MarshallHall/GrushkoFull.lean`.
+The solution proves the global Comparator-selected declaration by invoking
+the namespaced implementation theorem whose kernel-checked finite
+labelled-graph reduction closes in `MarshallHall/GrushkoFull.lean`.
 -/
 
 open Monoid.Coprod

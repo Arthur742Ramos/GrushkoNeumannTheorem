@@ -31,9 +31,9 @@ namespace MarshallHall
 
 /-- The rank of a free product of two finitely generated groups is additive.
 
-The proof is the finite labelled-graph reduction: a minimal null path yields
-either a safe fold or, after source-unfolding, a safe fold followed by an
-explicit monochromatic-vertex contraction.  The resulting strict decrease in
+The proof is the finite labelled-graph reduction: a minimal null path is
+handled by a source unfold, a subsequent safe fold, and an explicit
+monochromatic-vertex contraction.  The resulting strict decrease in
 the finite graph supplies the strong induction on the number of vertices.
 -/
 theorem rank_freeProduct_eq_add {G H : Type u} [Group G] [Group H]

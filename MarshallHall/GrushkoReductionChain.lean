@@ -3,14 +3,13 @@ import MarshallHall.GrushkoInvariant
 set_option maxHeartbeats 1000000
 
 /-!
-## Termination of the safe-fold reduction
+## Auxiliary safe-fold interface
 
 The graph files prove the local semantics of a fold and the invariant file
 proves the Euler inequality that is preserved by it.  This file supplies the
-global induction that those local facts support.  Its only hypothesis is the
-existence of a safe complementary path at every non-terminal stage.  Thus the
-remaining combinatorial issue is isolated precisely to the unfold case of
-the classical proof.
+global induction that those local facts support.  In the selected theorem,
+`GrushkoFull.lean` performs the complete reduction as a source unfold, then a
+safe fold, and then the monochromatic-vertex contraction.
 -/
 
 open Function Monoid.Coprod Quiver
@@ -55,11 +54,12 @@ def HasSafeNullFold : Prop :=
               p = e.toPath.comp q ∧
                 foldSymmPathAvoid (symmOrientedArrow e) q
 
-/-- The geometric branch of the reduction hypothesis.  This is weaker than
-`HasSafeNullFold`: it asks only for a geometrically simple null path, from
-which the first edge is safe by `foldSymmPathAvoid_of_geometricallySimple`.
-The complementary-path reuse case is exactly the part that still needs the
-classical unfold construction. -/
+/-- An auxiliary geometric condition used to derive `HasSafeNullFold`.  This
+is weaker than `HasSafeNullFold`: it asks only for a geometrically simple null
+path, from which the first edge is safe by
+`foldSymmPathAvoid_of_geometricallySimple`.  It is not an alternative branch
+of the selected global reduction, whose certified sequence is source unfold,
+safe fold, and monochromatic-vertex contraction. -/
 def HasGeometricallySimpleNullPath : Prop :=
   ∀ (n : ℕ) (V : Type) [Fintype V] [qV : Quiver.{0, 0} V]
     [hV : HasInvolutiveReverse V]

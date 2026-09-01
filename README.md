@@ -5,7 +5,7 @@ Grushko--Neumann theorem. For finitely generated groups `G` and `H`, the
 minimal number of generators of their free product is additive:
 
 ```lean
-theorem GrushkoNeumann.rank_freeProduct_eq_add
+theorem rank_freeProduct_eq_add
     {G H : Type u} [Group G] [Group H]
     [Group.FG G] [Group.FG H] :
     Group.rank (G ∗ H) = Group.rank G + Group.rank H
@@ -13,9 +13,25 @@ theorem GrushkoNeumann.rank_freeProduct_eq_add
 
 The theorem is stated against Mathlib's `Group.rank`, so the result is about
 the actual minimal generator invariant rather than a chosen generating tuple.
-The public `Challenge.lean` is deliberately tiny and Mathlib-only. Its
-corresponding `Solution.lean` imports the checked implementation and proves
-the statement by the exact public declaration above.
+The unqualified global declaration above is the exact theorem selected by
+`comparator.json` in both `Challenge.lean` and `Solution.lean`. The checked
+implementation library exposes the same proof as
+`GrushkoNeumann.rank_freeProduct_eq_add`; the global declaration in
+`Solution.lean` proves the selected surface by invoking that namespaced
+implementation theorem. The public `Challenge.lean` is deliberately tiny and
+Mathlib-only.
+
+## Repository provenance
+
+This repository is a focused, self-contained Palomar wrapper around the
+substantive formalization in
+[`MarshallHallTheorem`](https://github.com/Arthur742Ramos/MarshallHallTheorem/tree/449124d5b5659f0c34b5fbb46ffb671eeac4e08e).
+The substantive `MarshallHall.lean` and `MarshallHall/` implementation files
+are the pinned snapshot at commit
+`449124d5b5659f0c34b5fbb46ffb671eeac4e08e`; this repository adds the focused
+global Challenge/Solution surface, package wiring, and submission metadata.
+It does not claim an independent reimplementation of those substantive
+modules. The responsible maintainer controls both repositories.
 
 ## Proof architecture
 
@@ -23,12 +39,10 @@ The arbitrary-factor lower bound is proved through a finite labelled-graph
 reduction. Starting with a finite subdivided rose for a generating tuple, the
 development establishes the graph's marking, connectivity, reverse-freeness,
 and Euler bound. A minimal null path contains a null monochromatic run. The
-corresponding reduction is either:
-
-1. a safe fold that strictly decreases the finite vertex set; or
-2. a source-unfold in the edge-reuse case, followed by an explicit
-   monochromatic-vertex contraction that preserves the marking and gives the
-   same strict decrease.
+implemented reduction then always performs the same three stages: a source
+unfold, a subsequent safe fold, and an explicit monochromatic-vertex
+contraction. The contraction preserves the marking and, together with the
+preceding stages, gives the strict decrease in the finite vertex set.
 
 Strong induction on the number of vertices produces separated generators.
 The factorwise rank bounds then give the lower bound, while the canonical
@@ -47,8 +61,8 @@ The implementation is split so that the difficult steps are auditable:
 - `MarshallHall/GrushkoFold.lean`, `GrushkoFoldStep.lean`, and
   `GrushkoInvariant.lean` verify safe folds and invariant preservation.
 - `MarshallHall/GrushkoUnfold.lean`, `GrushkoRemove.lean`, and
-  `GrushkoUnsafe.lean` verify the edge-reuse branch and the
-  marking-preserving contraction.
+  `GrushkoUnsafe.lean` verify the source-unfold, subsequent safe fold, and
+  marking-preserving monochromatic-vertex contraction.
 - `MarshallHall/GrushkoFull.lean` closes the strong induction and proves the
   arbitrary-factor theorem.
 

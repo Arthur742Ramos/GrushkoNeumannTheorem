@@ -3,12 +3,13 @@ import MarshallHall.GrushkoRemove
 import MarshallHall.GrushkoInvariant
 
 /-!
-## The unsafe-fold branch
+## Monochromatic contraction after unfold and fold
 
 The source-unfold construction creates a second copy of a monochromatic
 source.  After the subsequent safe fold, the old copy remains a
 monochromatic vertex and can be contracted explicitly.  This file contains
-the bridge from that local construction to the removal operation.
+the bridge from that local construction to the removal operation used after
+the source unfold and subsequent safe fold.
 -/
 
 open Function Monoid.Coprod Quiver

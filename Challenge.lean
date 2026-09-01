@@ -5,9 +5,10 @@ import Mathlib.GroupTheory.Rank
 /-!
 # Grushko--Neumann rank additivity
 
-The public statement is deliberately small: the substantive proof is kept in
-the implementation library and the Comparator checks this exact theorem
-against `Solution.lean`.
+The public statement is deliberately small.  The unqualified global theorem
+below is the exact declaration selected by `comparator.json`; the substantive
+proof is kept in the implementation library and `Solution.lean` proves this
+same global declaration through the namespaced implementation theorem.
 -/
 
 open Monoid.Coprod
